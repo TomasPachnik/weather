@@ -1,11 +1,13 @@
-package sk.tomas.wm;
+package sk.tomas.wm.controller;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import sk.tomas.wm.Weather;
 import sk.tomas.wm.dao.WeatherDao;
 import sk.tomas.wm.entity.WeatherEntity;
 
@@ -14,6 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
+@RequestMapping("/weather")
 public class WeatherStationController {
 
     private WeatherDao weatherDao;
@@ -29,14 +32,6 @@ public class WeatherStationController {
     public List<Weather> getLast10Measures() {
         List<WeatherEntity> entities = weatherDao.findTop10ByOrderByCreatedDesc();
         return entities.stream().map(entity -> mapper.map(entity, Weather.class)).collect(Collectors.toList());
-    }
-
-    @PostMapping("/monitor")
-    public String allWithPagination(@RequestBody Weather weather) {
-        WeatherEntity entity = mapper.map(weather, WeatherEntity.class);
-        entity.setCreated(OffsetDateTime.now());
-        weatherDao.save(entity);
-        return "ok";
     }
 
 }
