@@ -1,25 +1,52 @@
 package sk.tomas.wm.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import sk.tomas.wm.dao.WeatherDao;
+import sk.tomas.wm.entity.WeatherEntity;
+
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Controller
 @RequestMapping("/graph")
 public class GraphController {
 
+    private static DateTimeFormatter FORMAT = DateTimeFormatter.ofPattern("HH:mm");
+
+    private WeatherDao weatherDao;
+
+    @Autowired
+    public GraphController(WeatherDao weatherDao) {
+        this.weatherDao = weatherDao;
+    }
+
     @RequestMapping
     public String index(Model model) {
-        String[] labels = {"pondelok", "utorok", "streda", "štvrtok", "piatok", "sobota", "nedeľa"};
-        double[] temperature = {8.62, 8.02, 13.62, 9.62, 8.62, 12.62, 18.62};
-        double[] humidity = {282, 350, 411, 502, 635, 809, 947};
-        double[] pressure = {168, 170, 178, 190, 203, 276, 408};
-        model.addAttribute("labels", labels);
-        model.addAttribute("temperature", temperature);
-        model.addAttribute("humidity", humidity);
-        model.addAttribute("pressure", pressure);
+        List<WeatherEntity> today = weatherDao.getToday();
+
+        List<String> labels = new ArrayList<>();
+        List<Double> temperature = new ArrayList<>();
+        List<Double> humidity = new ArrayList<>();
+        List<Double> pressure = new ArrayList<>();
+
+        for (WeatherEntity weather : today) {
+            labels.add(weather.getCreated().format(FORMAT));
+            temperature.add(((double) weather.getTemperature()) / 100);
+            humidity.add(((double) weather.getHumidity()) / 100);
+            pressure.add(((double) weather.getPressure()) / 10_000);
+        }
+
+        model.addAttribute("labels", labels.toArray());
+        model.addAttribute("temperature", temperature.toArray());
+        model.addAttribute("humidity", humidity.toArray());
+        model.addAttribute("pressure", pressure.toArray());
+        model.addAttribute("time", "Dnes");
         return "index.html";
     }
 
