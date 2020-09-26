@@ -1,5 +1,6 @@
 package sk.tomas.wm.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RestController
 @RequestMapping("/monitor")
 public class MeasureController {
@@ -30,6 +32,7 @@ public class MeasureController {
 
     @PostMapping
     public String allWithPagination(@RequestBody Weather weather) {
+        log.info(weather.print());
         WeatherEntity entity = mapper.map(weather, WeatherEntity.class);
         entity.setCreated(OffsetDateTime.now());
         weatherDao.save(entity);

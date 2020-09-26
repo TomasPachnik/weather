@@ -4,10 +4,40 @@
     <meta charset="UTF-8">
     <title>Get Started</title>
 </head>
-<body>
+<body style="width:75%; height:75%">
 <div>
-    <h1>Hello World Spring Boot!</h1>
+    <canvas id="line-chart"></canvas>
 </div>
-
+<script src="Chart.bundle.min.js"></script>
+<script>
+    new Chart(document.getElementById("line-chart"), {
+        type: 'line',
+        data: {
+            labels: ["pondelok", "utorok", "streda", "štvrtok", "piatok", "sobota", "nedeľa"],
+            datasets: [{
+                data: [86, 114, 106, 106, 107, 111, 133],
+                label: "Teplota",
+                borderColor: "#3e95cd",
+                fill: false
+            }, {
+                data: [282, 350, 411, 502, 635, 809, 947],
+                label: "Vlhkosť",
+                borderColor: "#8e5ea2",
+                fill: false
+            }, {
+                data: [168, 170, 178, 190, 203, 276, 408],
+                label: "Tlak",
+                borderColor: "#3cba9f",
+                fill: false
+            }]
+        },
+        options: {
+            title: {
+                display: true,
+                text: 'História počasia - Lipová alej'
+            }
+        }
+    });
+</script>
 </body>
 </html>
