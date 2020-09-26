@@ -1,31 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Get Started</title>
+    <title>História počasia - Lipová alej</title>
 </head>
 <body style="width:75%; height:75%">
 <div>
     <canvas id="line-chart"></canvas>
 </div>
 <script src="Chart.bundle.min.js"></script>
-<script>
+<script th:inline="javascript">
+
+    var labels = /*[[${labels}]]*/ 'default';
+    var temperature = /*[[${temperature}]]*/ 'default';
+    var humidity = /*[[${humidity}]]*/ 'default';
+    var pressure = /*[[${pressure}]]*/ 'default';
+
     new Chart(document.getElementById("line-chart"), {
         type: 'line',
         data: {
-            labels: ["pondelok", "utorok", "streda", "štvrtok", "piatok", "sobota", "nedeľa"],
+            labels: labels,
             datasets: [{
-                data: [86, 114, 106, 106, 107, 111, 133],
+                data: temperature,
                 label: "Teplota",
                 borderColor: "#3e95cd",
                 fill: false
             }, {
-                data: [282, 350, 411, 502, 635, 809, 947],
+                data: humidity,
                 label: "Vlhkosť",
                 borderColor: "#8e5ea2",
                 fill: false
             }, {
-                data: [168, 170, 178, 190, 203, 276, 408],
+                data: pressure,
                 label: "Tlak",
                 borderColor: "#3cba9f",
                 fill: false
