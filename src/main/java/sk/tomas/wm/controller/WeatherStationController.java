@@ -25,8 +25,11 @@ public class WeatherStationController {
     }
 
     @GetMapping("/today")
-    public List<Weather> getLast10Measures() {
-        return weatherDao.getToday().stream().map(entity -> mapper.map(entity, Weather.class)).collect(Collectors.toList());
+    public List<Weather> getToday() {
+        return weatherDao.getDays(0)
+                .stream()
+                .map(entity -> mapper.map(entity, Weather.class))
+                .collect(Collectors.toList());
     }
 
 }
