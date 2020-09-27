@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import sk.tomas.wm.Weather;
 import sk.tomas.wm.dao.WeatherDao;
@@ -24,9 +25,26 @@ public class WeatherStationController {
         this.mapper = mapper;
     }
 
-    @GetMapping("/today")
-    public List<Weather> getToday() {
-        return weatherDao.getDays(0)
+    @GetMapping
+    public List<Weather> getToday(@RequestParam(name = "period", required = false, defaultValue = "today") String period) {
+        int dividend;
+
+        switch (period) {
+            case "week":
+                dividend = 6;
+                break;
+            case "threeDays":
+                dividend = 2;
+                break;
+            case "twoDays":
+                dividend = 1;
+                break;
+            case "today":
+            default:
+                dividend = 0;
+        }
+
+        return weatherDao.getDays(dividend)
                 .stream()
                 .map(entity -> mapper.map(entity, Weather.class))
                 .collect(Collectors.toList());
