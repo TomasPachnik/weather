@@ -1,11 +1,11 @@
-package sk.tomas.wm;
+package sk.tomas.wm.dto;
 
 import lombok.Data;
 
 import java.text.MessageFormat;
 
 @Data
-public class Weather {
+public class WeatherDto {
 
     private long pressure;
     private int temperature;

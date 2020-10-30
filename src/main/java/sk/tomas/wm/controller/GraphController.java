@@ -6,7 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import sk.tomas.wm.Weather;
+import sk.tomas.wm.dto.WeatherDto;
 import sk.tomas.wm.dao.WeatherDao;
 import sk.tomas.wm.entity.WeatherEntity;
 
@@ -73,7 +73,7 @@ public class GraphController {
         Map<OffsetDateTime, List<WeatherEntity>> map = groupByHour(weatherInfo);
 
         for (Map.Entry<OffsetDateTime, List<WeatherEntity>> item : map.entrySet()) {
-            Weather weather = average(item.getValue());
+            WeatherDto weather = average(item.getValue());
 
             //if next day, show day name instead of time
             if (item.getKey().truncatedTo(ChronoUnit.DAYS).isAfter(last.truncatedTo(ChronoUnit.DAYS))) {
@@ -116,8 +116,8 @@ public class GraphController {
         return result;
     }
 
-    private Weather average(List<WeatherEntity> list) {
-        Weather result = new Weather();
+    private WeatherDto average(List<WeatherEntity> list) {
+        WeatherDto result = new WeatherDto();
 
         for (WeatherEntity item : list) {
             result.setTemperature(result.getTemperature() + item.getTemperature());
