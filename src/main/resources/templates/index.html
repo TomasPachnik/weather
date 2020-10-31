@@ -6,7 +6,12 @@
 </head>
 <body style="width:75%; height:75%">
 <div>
-    <canvas id="line-chart"></canvas>
+    <b><p th:text="'Aktuálne hodnoty k: '+ ${lastTime}"></p></b>
+    <p th:text="'Teplota: '+ ${lastTemperature} + ' °C'"></p>
+    <p th:text="'Vlhkosť: '+ ${lastHumidity} + ' %'"></p>
+    <p th:text="'Tlak:    '+ ${lastPressure} + ' hPa'"></p>
+</div>
+<canvas id="line-chart"></canvas>
 </div>
 <script src="Chart.bundle.min.js"></script>
 <script th:inline="javascript">

@@ -25,6 +25,7 @@ import java.util.Map;
 public class GraphController {
 
     private static DateTimeFormatter FORMAT = DateTimeFormatter.ofPattern("HH:mm");
+    private static DateTimeFormatter DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yyyy - HH:mm");
     private static DateTimeFormatter DAY_FORMAT = DateTimeFormatter.ofPattern("EEEE", Locale.forLanguageTag("SK"));
 
     private WeatherDao weatherDao;
@@ -93,11 +94,16 @@ public class GraphController {
         humidity.add(((double) actualWeather.getHumidity()) / 100);
         pressure.add(((double) actualWeather.getPressure()) / 10_000);
 
+
         model.addAttribute("labels", labels.toArray());
         model.addAttribute("temperature", temperature.toArray());
         model.addAttribute("humidity", humidity.toArray());
         model.addAttribute("pressure", pressure.toArray());
         model.addAttribute("time", time);
+        model.addAttribute("lastTime", actualWeather.getCreated().format(DATE_TIME_FORMAT));
+        model.addAttribute("lastTemperature", (double) actualWeather.getTemperature() / 100);
+        model.addAttribute("lastHumidity", (double) actualWeather.getHumidity() / 100);
+        model.addAttribute("lastPressure", (double) actualWeather.getPressure() / 10_000);
     }
 
     private Map<OffsetDateTime, List<WeatherEntity>> groupByHour(List<WeatherEntity> weatherInfo) {
