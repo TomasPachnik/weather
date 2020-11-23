@@ -17,6 +17,7 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/notifications")
@@ -42,9 +43,11 @@ public class NotificationController {
     }
 
     @DeleteMapping("/deleteFirst")
+    //delete first notification and all with same message
     public void deleteFirstNotification() {
         if (!notifications.isEmpty()) {
-            notifications.remove(0);
+            String message = notifications.get(0).getMessage();
+            notifications.removeIf(p -> p.getMessage().equals(message));
         }
     }
 
