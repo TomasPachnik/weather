@@ -19,5 +19,6 @@ public class WeatherEntity {
     private Long pressure;
     private Integer temperature;
     private Integer humidity;
+    private Integer voltage;
 
 }

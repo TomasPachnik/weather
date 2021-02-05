@@ -11,4 +11,7 @@ public interface WeatherDao extends JpaRepository<WeatherEntity, Long> {
     @Query("SELECT e FROM WEATHER e WHERE e.created  > (CURRENT_DATE - ?1) order by created asc")
     List<WeatherEntity> getDays(Integer minusDays);
 
+    WeatherEntity findTopByOrderByCreatedDesc();
+
+
 }

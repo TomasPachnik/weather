@@ -94,7 +94,6 @@ public class GraphController {
         humidity.add(((double) actualWeather.getHumidity()) / 100);
         pressure.add(((double) actualWeather.getPressure()) / 10_000);
 
-
         model.addAttribute("labels", labels.toArray());
         model.addAttribute("temperature", temperature.toArray());
         model.addAttribute("humidity", humidity.toArray());
@@ -104,6 +103,7 @@ public class GraphController {
         model.addAttribute("lastTemperature", (double) actualWeather.getTemperature() / 100);
         model.addAttribute("lastHumidity", (double) actualWeather.getHumidity() / 100);
         model.addAttribute("lastPressure", (double) actualWeather.getPressure() / 10_000);
+        model.addAttribute("lastVoltage", (double) actualWeather.getVoltage() / 100);
     }
 
     private Map<OffsetDateTime, List<WeatherEntity>> groupByHour(List<WeatherEntity> weatherInfo) {
