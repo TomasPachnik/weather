@@ -20,21 +20,24 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
     @ExceptionHandler(BusinessException.class)
     protected ResponseEntity<Object> handleConflict(BusinessException e, WebRequest request) {
-        ErrorResponse errorResponse = generateErrorResponse(e.getMessage());
-        log.warn("Error with id '" + errorResponse.getId() + "':", e);
+        log.warn(e.getMessage());
         return handleExceptionInternal(e, generateErrorResponse(e.getMessage()), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
 
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<Object> handleConflict(Exception e, WebRequest request) {
-        ErrorResponse errorResponse = generateErrorResponse("Server error.");
+        ErrorResponse errorResponse = generateErrorResponse(UUID.randomUUID(), "Server error.");
         log.error("Server error with id '" + errorResponse.getId() + "':", e);
-        return handleExceptionInternal(e, generateErrorResponse(e.getMessage()), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
+        return handleExceptionInternal(e, errorResponse, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
     }
 
     private static ErrorResponse generateErrorResponse(String message) {
+        return generateErrorResponse(null, message);
+    }
+
+    private static ErrorResponse generateErrorResponse(UUID uuid, String message) {
         return ErrorResponse.builder()
-                .id(UUID.randomUUID())
+                .id(uuid)
                 .created(OffsetDateTime.now())
                 .message(message)
                 .build();
