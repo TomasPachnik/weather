@@ -6,9 +6,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import sk.tomas.wm.dto.WeatherDto;
 import sk.tomas.wm.dao.WeatherDao;
+import sk.tomas.wm.dto.WeatherDto;
 import sk.tomas.wm.entity.WeatherEntity;
+import sk.tomas.wm.exception.NoEntryException;
 
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
@@ -66,6 +67,11 @@ public class GraphController {
             default:
                 weatherInfo = weatherDao.getDays(0);
                 time = "Dnes";
+        }
+
+        if (weatherInfo.isEmpty()) {
+            WeatherEntity entry = weatherDao.findTopByOrderByCreatedDesc();
+            throw new NoEntryException("No actual weather information available. The last entry was at: " + entry.getCreated().format(DATE_TIME_FORMAT) + ".");
         }
 
         //get actual weather info and remove it from list
